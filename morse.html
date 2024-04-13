@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Morse Code</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f2f2f2;
+}
+
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
+}
+
+input, textarea, button {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.result {
+    margin-top: 20px;
+}
+
+.result textarea {
+    width: 100%;
+    height: 100px;
+    resize: none;
+}
+
+@media screen and (max-width: 600px) {
+    .container {
+        width: 90%;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Morse Code</h1>
+    <form>
+        <label for="plaintext">Enter Text:</label>
+        <textarea id="plaintext" rows="4" cols="50" placeholder="Enter your text..."></textarea>
+        <button type="button" onclick="encrypt()">Encrypt to Morse Code</button>
+        <div class="result">
+            <label for="morseCode">Morse Code:</label>
+            <textarea id="morseCode" readonly placeholder="Morse code will appear here..."></textarea>
+        </div>
+    </form>
+
+    <form>
+        <label for="morseInput">Enter Morse Code:</label>
+        <textarea id="morseInput" rows="4" cols="50" placeholder="Enter Morse code..."></textarea>
+        <button type="button" onclick="decrypt()">Decrypt from Morse Code</button>
+        <div class="result">
+            <label for="decodedText">Decoded Text:</label>
+            <textarea id="decodedText" readonly placeholder="Decoded text will appear here..."></textarea>
+        </div>
+    </form>
+</div>
+
+<script>
+const morseCode = {
+    'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.', 'G': '--.', 'H': '....',
+    'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..', 'M': '--', 'N': '-.', 'O': '---', 'P': '.--.',
+    'Q': '--.-', 'R': '.-.', 'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
+    'Y': '-.--', 'Z': '--..',
+    '0': '-----', '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....', '6': '-....',
+    '7': '--...', '8': '---..', '9': '----.',
+    '.': '.-.-.-', ',': '--..--', '?': '..--..', "'": '.----.', '!': '-.-.--', '/': '-..-.', '(': '-.--.',
+    ')': '-.--.-', '&': '.-...', ':': '---...', ';': '-.-.-.', '=': '-...-', '+': '.-.-.', '-': '-....-',
+    '_': '..--.-', '"': '.-..-.', '$': '...-..-', '@': '.--.-.'
+};
+
+const reverseMorseCode = {};
+for (let char in morseCode) {
+    reverseMorseCode[morseCode[char]] = char;
+}
+
+function encrypt() {
+    let plaintext = document.getElementById('plaintext').value.toUpperCase();
+    let morseText = '';
+    for (let i = 0; i < plaintext.length; i++) {
+        let char = plaintext[i];
+        if (morseCode[char]) {
+            morseText += morseCode[char] + ' ';
+        } else if (char === ' ') {
+            morseText += ' / ';
+        }
+    }
+    document.getElementById('morseCode').value = morseText.trim();
+}
+
+function decrypt() {
+    let morseInput = document.getElementById('morseInput').value.trim();
+    let words = morseInput.split(' / ');
+    let decodedText = '';
+    for (let word of words) {
+        let chars = word.split(' ');
+        for (let char of chars) {
+            if (reverseMorseCode[char]) {
+                decodedText += reverseMorseCode[char];
+            }
+        }
+        decodedText += ' ';
+    }
+    document.getElementById('decodedText').value = decodedText.trim();
+}
+</script>
+
+</body>
+</html>
